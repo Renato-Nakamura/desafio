@@ -78,25 +78,53 @@ let ofertas = [
 
 window.onload = () => {
   jogosLista.innerHTML = "";
+  addDiscount();
 
   ofertas.map((oferta) => {
     jogosLista.innerHTML += `
       <article class="oferta">
-        <header>
-          <h4>
-            ${oferta.title}
-          </h4>
-        </header>
 
         <figure>
-          <img src="${oferta.thumb}" alt="${oferta.title}">
+          <img class="game-image" src="${oferta.thumb}" alt="${oferta.title}">
         </figure>
 
         <section>
-          <small class="preco-normal">$ ${oferta.normalPrice}</small>
-          <h5 class="preco-oferta">$ ${oferta.salePrice}</h5>
+          <h2 class="text">
+            ${oferta.title}
+          </h2>
+        </section>
+      
+        <section class="game-info">
+          <div>
+            <button>
+              <h3 class="text-bold">
+                DETALHES
+              </h3>
+            </button>
+          </div>
+          <div class="game-value">
+            <div class="game-price">
+              <small class="preco-normal">$ ${oferta.normalPrice}</small>
+              <h5 class="preco-oferta text-bold">$ ${oferta.salePrice}</h5>
+            </div>
+            <div class="game-discount">
+              <h3 class="text-bold">
+                ${oferta.discount == 100 ? "GRÁTIS" : -oferta.discount + "%"}
+              </h3>
+            </div>
+          </div>
         </section> 
       </article>
       `;
   });
 };
+
+function addDiscount() {
+  ofertas = ofertas.map((oferta) => {
+    let discount =
+      1 - parseInt(oferta.salePrice) / parseInt(oferta.normalPrice);
+    let percentage = 100 * discount.toFixed(2);
+    oferta.discount = percentage;
+    return oferta;
+  });
+}

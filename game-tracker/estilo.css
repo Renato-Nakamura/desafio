@@ -11,6 +11,29 @@
     Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+}
+
+.text {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 28px;
+  letter-spacing: 0em;
+}
+
+.text-bold {
+  font-family: Roboto;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 21px;
+  letter-spacing: 0em;
+}
+
+.container {
+  margin-left: 8.125em;
+  margin-right: 8.125em;
 }
 
 body {
@@ -21,6 +44,65 @@ body {
   );
   background-attachment: fixed;
   color: var(--texto);
+}
+
+header {
+  background-color: var(--primario);
+  height: 3.125em;
+  display: flex;
+  align-items: center;
+  margin-bottom: 2.8125em;
+}
+
+.ofertas{
+  margin-bottom: 1.375em;
+}
+
+.filters{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2.3125em;
+}
+
+.order{
+  display: flex;
+  gap: 1.25em;
+}
+
+#jogos-lista{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25em;
+}
+
+
+.oferta{
+  width: 23.75em;
+  height: 15.6875em;
+  background-color: var(--primario);
+}
+
+.game-info{
+  display: flex;
+}
+
+.game-value{
+  display: flex;
+}
+
+.game-discount{
+  background-color: var(--sucesso);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  padding: 9px 10px;
+}
+.game-discount > h3{
+  font-size: 18px;
+}
+
+.game-image{
+  width: 100%;
 }
 
 figure {

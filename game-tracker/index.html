@@ -37,12 +37,27 @@
   </head>
   <body>
     <header>
-      <img src="assets/logo-horizontal.svg" alt="Logo Game Tracker" />
+      <img class="container" src="assets/logo-horizontal.svg" alt="Logo Game Tracker" />
     </header>
 
-    <h2>Ofertas</h2>
+    <div class="container ofertas">
+      <h2 class="text">Ofertas</h2>
+    </div>
+    
+    <article class="container filters">
+      <input type="text" name="" id="search">
+      <section class="order">
+        <p class="text-bold">Ordenar por:</p>
+        <select name="" id="orderBy">
+          <option value="">% de Desconto</option>
+          <option value="">Maior preço</option>
+          <option value="">Menor preço</option>
+          <option value="">Título</option>
+        </select>
+      </section>
+    </article>
 
-    <main>
+    <main class="container">
       <article id="jogos-lista"></article>
     </main>
 
