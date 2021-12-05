@@ -1,6 +1,6 @@
 const jogosLista = document.getElementById("jogos-lista");
 
-let ofertas = [
+let ofertasold = [
   {
     title: "RAGE 2",
     salePrice: "0,00",
@@ -75,10 +75,32 @@ let ofertas = [
     thumb: "assets/imgs/1368820.jpg",
   },
 ];
-
-window.onload = () => {
-  jogosLista.innerHTML = "";
+let ofertas = []
+window.onload = async() => {
+   await getListFromAPI()
+  
   addDiscount();
+  orderGamesBy();
+};
+
+const getListFromAPI = async()=>{
+  const response = await fetch("https://www.cheapshark.com/api/1.0/deals?pageNumber=0&pageSize=12&storeID=1&onSale=1&AAA=1")
+  ofertas = await response.json()
+  console.log(ofertas)
+}
+
+const addDiscount = () => {
+  ofertas = ofertas.map((oferta) => {
+    let discount =
+      1 - parseInt(oferta.salePrice) / parseInt(oferta.normalPrice);
+    let percentage = -100 * discount.toFixed(2);
+    oferta.discount = percentage;
+    return oferta;
+  });
+}
+
+const insertGamesOnPage= (ofertas) => {
+  jogosLista.innerHTML = "";
 
   ofertas.map((oferta) => {
     jogosLista.innerHTML += `
@@ -89,15 +111,15 @@ window.onload = () => {
         </figure>
 
         <section>
-          <h2 class="text">
+          <h2 class="text title">
             ${oferta.title}
           </h2>
         </section>
       
         <section class="game-info">
           <div>
-            <button>
-              <h3 class="text-bold">
+            <button class="details">
+              <h3 class="text-bold ">
                 DETALHES
               </h3>
             </button>
@@ -109,7 +131,7 @@ window.onload = () => {
             </div>
             <div class="game-discount">
               <h3 class="text-bold">
-                ${oferta.discount == 100 ? "GRÁTIS" : -oferta.discount + "%"}
+                ${oferta.discount == -100 ? "GRÁTIS" : oferta.discount + "%"}
               </h3>
             </div>
           </div>
@@ -117,14 +139,48 @@ window.onload = () => {
       </article>
       `;
   });
+}
+
+const orderList = (criteria, order) => {
+if (criteria=="salePrice"){
+  return (a, b) => {
+    let result = 0
+    if (parseInt(a.salePrice) < parseInt(b.salePrice)) result = -1;
+    if (parseInt(a.salePrice) > parseInt(b.salePrice)) result = 1;
+    if(order == "decrescent") result = -result
+    return result;
+  };
+}else{
+  return (a, b) => {
+    if (a[criteria] < b[criteria]) return -1;
+    if (a[criteria] > b[criteria]) return 1;
+    return 0;
+  };
+}
+
 };
 
-function addDiscount() {
-  ofertas = ofertas.map((oferta) => {
-    let discount =
-      1 - parseInt(oferta.salePrice) / parseInt(oferta.normalPrice);
-    let percentage = 100 * discount.toFixed(2);
-    oferta.discount = percentage;
-    return oferta;
-  });
+const orderGamesBy=() => {
+  let criteria = document.getElementById("orderBy").value;
+  let order = "crescent"
+
+  if (criteria == "price-decrescent") {
+    criteria = "salePrice";
+    order = "decrescent"
+  }else   if (criteria == "price-crescent") {
+    criteria = "salePrice";
+  }
+  if(filteredOfertas.length>0){
+    filteredOfertas.sort(orderList(criteria,order));
+    insertGamesOnPage(filteredOfertas);
+  }else{
+    ofertas.sort(orderList(criteria,order));
+    insertGamesOnPage(ofertas);
+  }
+}
+let filteredOfertas=[];
+const search =()=>{
+  let entry = document.getElementById("search").value;
+  filteredOfertas =ofertas.filter((oferta)=>oferta.title.toLowerCase().includes(entry))
+  insertGamesOnPage(filteredOfertas);
 }
