@@ -75,19 +75,34 @@ let ofertasold = [
     thumb: "assets/imgs/1368820.jpg",
   },
 ];
-let ofertas = []
-window.onload = async() => {
-   await getListFromAPI()
-  
-  addDiscount();
+let ofertas = [];
+window.onload = async () => {
+  await getListFromAPI();
+
+  //addDiscount();
   orderGamesBy();
 };
 
-const getListFromAPI = async()=>{
-  const response = await fetch("https://www.cheapshark.com/api/1.0/deals?pageNumber=0&pageSize=12&storeID=1&onSale=1&AAA=1")
-  ofertas = await response.json()
-  console.log(ofertas)
-}
+const getListFromAPI = async () => {
+  const response = await fetch(
+    "https://www.cheapshark.com/api/1.0/deals?pageNumber=0&pageSize=12&storeID=1&onSale=1&AAA=1"
+  );
+  let data = await response.json();
+
+  ofertas = await Promise.all(
+    data.map(async (oferta) => {
+      let newThumb = await fetch(
+        "https://cdn.akamai.steamstatic.com/steam/apps/" +
+          oferta.steamAppID +
+          "/header.jpg"
+      ).catch((e)=>{console.log("não foi possível encontrar a imagem do jogo" + oferta.title)});
+      if(newThumb && newThumb.url){
+        oferta.thumb = newThumb.url;
+      }
+      return oferta;
+    })
+  );
+};
 
 const addDiscount = () => {
   ofertas = ofertas.map((oferta) => {
@@ -97,9 +112,9 @@ const addDiscount = () => {
     oferta.discount = percentage;
     return oferta;
   });
-}
+};
 
-const insertGamesOnPage= (ofertas) => {
+const insertGamesOnPage = (ofertas) => {
   jogosLista.innerHTML = "";
 
   ofertas.map((oferta) => {
@@ -131,7 +146,11 @@ const insertGamesOnPage= (ofertas) => {
             </div>
             <div class="game-discount">
               <h3 class="text-bold">
-                ${oferta.discount == -100 ? "GRÁTIS" : oferta.discount + "%"}
+                ${
+                  oferta.savings == 100
+                    ? "GRÁTIS"
+                    : -parseInt(oferta.savings).toFixed(0) + "%"
+                }
               </h3>
             </div>
           </div>
@@ -139,48 +158,49 @@ const insertGamesOnPage= (ofertas) => {
       </article>
       `;
   });
-}
-
-const orderList = (criteria, order) => {
-if (criteria=="salePrice"){
-  return (a, b) => {
-    let result = 0
-    if (parseInt(a.salePrice) < parseInt(b.salePrice)) result = -1;
-    if (parseInt(a.salePrice) > parseInt(b.salePrice)) result = 1;
-    if(order == "decrescent") result = -result
-    return result;
-  };
-}else{
-  return (a, b) => {
-    if (a[criteria] < b[criteria]) return -1;
-    if (a[criteria] > b[criteria]) return 1;
-    return 0;
-  };
-}
-
 };
 
-const orderGamesBy=() => {
+const orderList = (criteria, order) => {
+  if (criteria == "salePrice") {
+    return (a, b) => {
+      let result = 0;
+      if (parseInt(a.salePrice) < parseInt(b.salePrice)) result = -1;
+      if (parseInt(a.salePrice) > parseInt(b.salePrice)) result = 1;
+      if (order == "decrescent") result = -result;
+      return result;
+    };
+  } else {
+    return (a, b) => {
+      if (a[criteria] < b[criteria]) return -1;
+      if (a[criteria] > b[criteria]) return 1;
+      return 0;
+    };
+  }
+};
+
+const orderGamesBy = () => {
   let criteria = document.getElementById("orderBy").value;
-  let order = "crescent"
+  let order = "crescent";
 
   if (criteria == "price-decrescent") {
     criteria = "salePrice";
-    order = "decrescent"
-  }else   if (criteria == "price-crescent") {
+    order = "decrescent";
+  } else if (criteria == "price-crescent") {
     criteria = "salePrice";
   }
-  if(filteredOfertas.length>0){
-    filteredOfertas.sort(orderList(criteria,order));
+  if (filteredOfertas.length > 0) {
+    filteredOfertas.sort(orderList(criteria, order));
     insertGamesOnPage(filteredOfertas);
-  }else{
-    ofertas.sort(orderList(criteria,order));
+  } else {
+    ofertas.sort(orderList(criteria, order));
     insertGamesOnPage(ofertas);
   }
-}
-let filteredOfertas=[];
-const search =()=>{
+};
+let filteredOfertas = [];
+const search = () => {
   let entry = document.getElementById("search").value;
-  filteredOfertas =ofertas.filter((oferta)=>oferta.title.toLowerCase().includes(entry))
+  filteredOfertas = ofertas.filter((oferta) =>
+    oferta.title.toLowerCase().includes(entry)
+  );
   insertGamesOnPage(filteredOfertas);
-}
+};
