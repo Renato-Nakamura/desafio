@@ -18,18 +18,49 @@ export class CadastroOfertasComponent implements OnInit {
     titulo: string;
     preco: string;
     precoDesconto: string;
+    loja:number;
+    descricao:string;
   };
+
+  invalid:{
+    id: boolean;
+    titulo: boolean;
+    preco: boolean;
+    precoDesconto: boolean;
+    loja:boolean;
+    descricao:boolean;
+  };
+
+
+  data = JSON.parse(window.localStorage.getItem("ofertas-game-tracker"));
 
   constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
     let id = this.route.snapshot.params["id"];
-    this.gameInfo = this.getGameInformation(id);
-    console.log(id, this.gameInfo);
+    if(!isNaN(id)){
+      this.gameInfo = this.data.find((game) => game.id == id);
+    }else{
+      this.gameInfo = {
+        id: 0,
+        titulo: "",
+        preco: "",
+        precoDesconto: "",
+        loja: 0,
+        descricao:"",
+      };
+    }
+    console.log(typeof id, this.gameInfo);
   }
 
-  getGameInformation(id:number) {
-    let data = JSON.parse(window.localStorage.getItem("ofertas-game-tracker"));
-    return data.find((game) => game.id == id);
+  save(){
+    console.log(this.gameInfo)
+    if(this.gameInfo.id != 0){
+
+    }else{
+      
+      this.data.push(this.gameInfo)
+
+    }
   }
 }

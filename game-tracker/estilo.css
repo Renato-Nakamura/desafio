@@ -30,7 +30,6 @@
   line-height: 21px;
   letter-spacing: 0em;
 }
-
 .container {
   margin-left: 8.125em;
   margin-right: 8.125em;
@@ -97,13 +96,6 @@ header {
   padding: 1em;
   color: var(--texto);
   font-weight: 200;
-}
-
-#orderBy#xyz{
-  border: none;
-  outline: none;
-
-
 }
 
 main {
@@ -220,7 +212,7 @@ footer {
 }
 
 .links {
-  width: 100%;
+  width: 70%;
   display: flex;
   justify-content: space-around;
 }
@@ -228,4 +220,51 @@ footer {
 .links > a {
   text-decoration: none;
   color: var(--texto);
+}
+@media (max-width: 768px) {
+  .container {
+    margin: 0;
+  }
+  .ofertas {
+    display: flex;
+    justify-content: center;
+    padding-top: 4em;
+  }
+  .order {
+    flex-direction: column;
+    gap: 0;
+  }
+  .searchbar {
+    height: 45px;
+  }
+  .searchbar > input {
+    width: 100%;
+  }
+  .filters {
+    align-items: flex-end;
+    gap: 1em;
+    margin: 1em;
+    justify-content: center;
+  }
+
+  #jogos-lista {
+    justify-content: center;
+  }
+
+  footer {
+    justify-content: center;
+    padding: 1em;
+    gap: 1em;
+    height: auto;
+  }
+  header {
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+  }
+  .links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+  }
 }
