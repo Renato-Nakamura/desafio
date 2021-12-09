@@ -106,6 +106,7 @@ main {
 
 #jogos-lista {
   display: flex;
+  justify-content: center;
   flex-wrap: wrap;
   gap: 1.25em;
 }
@@ -225,29 +226,30 @@ footer {
   .container {
     margin: 0;
   }
+
   .ofertas {
     display: flex;
     justify-content: center;
     padding-top: 4em;
   }
+
   .order {
     flex-direction: column;
     gap: 0;
   }
+
   .searchbar {
     height: 45px;
   }
+
   .searchbar > input {
     width: 100%;
   }
+
   .filters {
     align-items: flex-end;
     gap: 1em;
     margin: 1em;
-    justify-content: center;
-  }
-
-  #jogos-lista {
     justify-content: center;
   }
 
@@ -257,11 +259,13 @@ footer {
     gap: 1em;
     height: auto;
   }
+  
   header {
     justify-content: center;
     position: fixed;
     width: 100%;
   }
+
   .links {
     flex-direction: column;
     align-items: center;

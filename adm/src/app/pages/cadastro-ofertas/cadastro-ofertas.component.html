@@ -6,7 +6,8 @@
             <div class="campos" *ngIf="gameInfo.id!=0">
                 <mat-form-field appearance="outline">
                     <mat-label>ID</mat-label>
-                    <input readonly required matInput placeholder="ID do jogo" name="gameInfo.id" [(ngModel)]="gameInfo.id">
+                    <input readonly required matInput placeholder="ID do jogo" name="gameInfo.id"
+                        [(ngModel)]="gameInfo.id">
                 </mat-form-field>
 
             </div>
@@ -15,45 +16,62 @@
             <div class="campos">
                 <mat-form-field appearance="outline">
                     <mat-label>Título</mat-label>
-                    <input matInput required placeholder="Título do jogo" [(ngModel)]="gameInfo.titulo">
+                    <input matInput required placeholder="Título do jogo" [(ngModel)]="gameInfo.titulo"
+                        #titulo='ngModel'>
                 </mat-form-field>
-                
+                <div *ngIf="titulo?.invalid && (titulo.dirty || titulo.touched)">O titulo é obrigatorio</div>
             </div>
 
             <div class="campos">
                 <mat-form-field appearance="outline">
                     <mat-label>Preço</mat-label>
-                    <input matInput required placeholder="Preço do jogo" [(ngModel)]="gameInfo.preco">
+                    <input matInput required placeholder="Preço do jogo" [(ngModel)]="gameInfo.preco" #preco='ngModel'
+                        (keyup)="isPriceValid()">
                 </mat-form-field>
+                <div *ngIf="preco?.invalid && (preco.dirty || preco.touched)">O preço é obrigatorio</div>
+                <div *ngIf="precoMin?.invalid ">O preço deve ser maior que 0</div>
+
             </div>
 
             <div class="campos">
                 <mat-form-field appearance="outline">
                     <mat-label>Preço com desconto</mat-label>
-                    <input matInput required placeholder="Preço com desconto" [(ngModel)]="gameInfo.precoDesconto">
+                    <input matInput required placeholder="Preço com desconto" [(ngModel)]="gameInfo.precoDesconto"
+                        #precoDesconto='ngModel' (keyup)="isPriceValid()">
                 </mat-form-field>
+                <div *ngIf="precoDesconto?.invalid && (precoDesconto.dirty || precoDesconto.touched)">O preço com
+                    desconto é obrigatorio</div>
+                <div *ngIf="precoDescMin?.invalid ">O preço deve ser maior que 0</div>
+                <div *ngIf="precoDescMax?.invalid ">O preço deve ser menor que o valor do jogo</div>
             </div>
 
             <div class="campos">
-                <mat-form-field appearance="outline" >
+                <mat-form-field appearance="outline">
                     <mat-label>Loja</mat-label>
-                    <mat-select required [(ngModel)]="gameInfo.loja" >
+                    <mat-select required [(ngModel)]="gameInfo.loja" (closed)="isLojaValid()" #loja='ngModel'>
                         <mat-option *ngFor="let loja of lojas" value={{loja.id}}>{{loja.nome}}</mat-option>
                     </mat-select>
                 </mat-form-field>
+                <div *ngIf="lojaId?.invalid && (loja.dirty || loja.touched)">Loja é obrigatorio</div>
+
             </div>
 
 
             <div class="campos">
                 <mat-form-field appearance="outline">
                     <mat-label>Descrição</mat-label>
-                    <input matInput placeholder="Descrição"  [(ngModel)]="gameInfo.descricao">
+                    <input matInput placeholder="Descrição" [(ngModel)]="gameInfo.descricao">
                 </mat-form-field>
             </div>
 
         </div>
-        <div class="campos">
-            <button (click)="save()" mat-raised-button color="primary">Salvar</button>
+        <div class="buttons">
+            <div class="campos">
+                <button (click)="cancel()" mat-raised-button color="red">Cancelar</button>
+            </div>
+            <div class="campos">
+                <button (click)="save()" type="submit" mat-raised-button color="primary">Salvar</button>
+            </div>
         </div>
     </div>
 </section>
